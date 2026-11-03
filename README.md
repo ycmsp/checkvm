@@ -11,6 +11,9 @@ vmware vbox kvm  qemu pve
 
 PanChat Online: https://pan.jiasu7.top/u/1
 
+GUI DEMO 
+<img width="818" height="826" alt="image" src="https://github.com/user-attachments/assets/921fb61a-fc00-45c2-b003-8ae2efc00421" />
+
 ---
 
 ## 一、文件清单
