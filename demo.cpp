@@ -65,7 +65,7 @@ int main() {
     log("  CheckVM DLL Call Demo\n");
     log("  =====================\n\n");
 
-    test_dll("checkvm.dll");
+    test_dll("checkvm-x64.dll");
 
     if (GetFileAttributesA("checkvm-x86.dll") != INVALID_FILE_ATTRIBUTES) {
         test_dll("checkvm-x86.dll");
