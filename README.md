@@ -20,14 +20,11 @@ GUI DEMO
 
 | 文件 | 说明 |
 |---|---|
-| `checkvm.dll` | 64 位 DLL（运行时需要） |
-| `checkvm.lib` | 64 位导入库（C++ 链接时需要） |
+| `checkvm-x64.dll` | 64 位 DLL（运行时需要） |
 | `checkvm-x86.dll` | 32 位 DLL |
-| `checkvm-x86.lib` | 32 位导入库 |
-| `checkvm.h` | C++ 头文件 |
 
 **架构匹配规则：**
-- 64 位程序（x64）→ 用 `checkvm.dll`
+- 64 位程序（x64）→ 用 `checkvm-x64.dll`
 - 32 位程序（x86）→ 用 `checkvm-x86.dll`
 - **不能混用**，否则加载失败
 
@@ -101,7 +98,7 @@ VmDetectionSummary DetectVm();
 #include <stdio.h>
 #include "checkvm.h"
 
-#pragma comment(lib, "checkvm.lib")    // 链接时自动找 checkvm.dll
+#pragma comment(lib, "checkvm.lib")    // 链接时自动找 checkvm-x64.dll
 
 int main() {
     // 方式 1：简单版
@@ -140,7 +137,7 @@ typedef int (*FN_IsVM)();
 typedef int (*FN_DetectEx)(int*,int*,int*,int*,int*,int*,char*,int);
 
 int main() {
-    HMODULE hDll = LoadLibraryA("checkvm.dll");   // 或 "checkvm-x86.dll"
+    HMODULE hDll = LoadLibraryA("checkvm-x64.dll");   // 或 "checkvm-x86.dll"
     if (!hDll) { printf("DLL加载失败\n"); return 1; }
 
     FN_IsVM IsVM = (FN_IsVM)GetProcAddress(hDll, "IsVirtualMachine");
@@ -171,11 +168,11 @@ using System.Text;
 
 class CheckVm {
     // ===== 简单版 =====
-    [DllImport("checkvm.dll", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("checkvm-x64.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern int IsVirtualMachine();
 
     // ===== 详细版 =====
-    [DllImport("checkvm.dll", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport("checkvm-x64.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern int DetectVmEx(
         out int isVm,
         out int cond1, out int cond2, out int cond3,
@@ -213,8 +210,8 @@ class CheckVm {
 import ctypes
 from ctypes import c_int, c_char_p, create_string_buffer
 
-# 加载 DLL (64位用 checkvm.dll, 32位用 checkvm-x86.dll)
-dll = ctypes.CDLL("checkvm.dll")
+# 加载 DLL (64位用 checkvm-x64.dll, 32位用 checkvm-x86.dll)
+dll = ctypes.CDLL("checkvm-x64.dll")
 
 # ===== 简单版 =====
 dll.IsVirtualMachine.restype = c_int
@@ -261,10 +258,10 @@ print(f"JSON: {json_buf.value.decode('utf-8')}")
 ```
 .版本 2
 
-.DLL命令 IsVirtualMachine, 整数型, "checkvm.dll", "IsVirtualMachine"
+.DLL命令 IsVirtualMachine, 整数型, "checkvm-x64.dll", "IsVirtualMachine"
     ' 返回: 1=虚拟机 0=物理机 -1=失败
 
-.DLL命令 DetectVmEx, 整数型, "checkvm.dll", "DetectVmEx"
+.DLL命令 DetectVmEx, 整数型, "checkvm-x64.dll", "DetectVmEx"
     .参数 isVm, 整数型, 传址
     .参数 cond1, 整数型, 传址
     .参数 cond2, 整数型, 传址
@@ -302,9 +299,9 @@ ret ＝ DetectVmEx (isVm, c1, c2, c3, c4, c5, json, 512)
 unit CheckVm;
 
 interface
-  function IsVirtualMachine: Integer; stdcall; external 'checkvm.dll';
+  function IsVirtualMachine: Integer; stdcall; external 'checkvm-x64.dll';
   function DetectVmEx(var isVm, cond1, cond2, cond3, cond4, cond5: Integer;
-                      jsonBuf: PChar; jsonBufSize: Integer): Integer; stdcall; external 'checkvm.dll';
+                      jsonBuf: PChar; jsonBufSize: Integer): Integer; stdcall; external 'checkvm-x64.dll';
 
 implementation
 
@@ -323,8 +320,8 @@ implementation
 ### VB6 / VBA
 
 ```vb
-Private Declare Function IsVirtualMachine Lib "checkvm.dll" () As Long
-Private Declare Function DetectVmEx Lib "checkvm.dll" _
+Private Declare Function IsVirtualMachine Lib "checkvm-x64.dll" () As Long
+Private Declare Function DetectVmEx Lib "checkvm-x64.dll" _
     (ByRef isVm As Long, ByRef cond1 As Long, ByRef cond2 As Long, _
      ByRef cond3 As Long, ByRef cond4 As Long, ByRef cond5 As Long, _
      ByVal jsonBuf As String, ByVal jsonBufSize As Long) As Long
@@ -355,7 +352,7 @@ End Sub
 
 ---
 
-### Q2: `LoadLibrary("checkvm.dll")` 返回 NULL
+### Q2: `LoadLibrary("checkvm-x64.dll")` 返回 NULL
 
 | GetLastError | 含义 | 解决 |
 |---|---|---|
@@ -369,10 +366,10 @@ End Sub
 
 ```csharp
 // 方法 1：指定完整路径
-[DllImport(@"C:\MyApp\checkvm.dll")]
+[DllImport(@"C:\MyApp\checkvm-x64.dll")]
 
 // 方法 2：放到 EXE 同目录，用文件名即可
-[DllImport("checkvm.dll")]
+[DllImport("checkvm-x64.dll")]
 
 // Unity 特殊：放到 Assets/Plugins/x86_64/ 文件夹下
 ```
@@ -402,7 +399,7 @@ End Sub
 ### Q7: 怎么确认 DLL 导出的函数正确？
 
 ```cmd
-dumpbin /exports checkvm.dll
+dumpbin /exports checkvm-x64.dll
 ```
 
 应该看到：
