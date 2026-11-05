@@ -1,4 +1,4 @@
-# CheckVM DLL 调用 Wiki
+# CheckVM SDK 调用 Wiki
 
 > 虚拟机检测 DLL — 支持 x64 / x86，跨语言调用
 
