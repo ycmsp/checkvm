@@ -7,7 +7,7 @@ vmware vbox kvm  qemu pve
 
 支持c++,c#,Python,易语言,Delphi,VBA语言调用
 
-官网：https://vmquxunihua.com  QQ：137879654
+官网：https://vm.jiasu7.top  QQ：137879654
 
 PanChat Online: https://pan.jiasu7.top/u/1
 
